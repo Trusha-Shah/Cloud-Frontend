@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import './App.css';
 
 function App() {
@@ -8,20 +9,14 @@ function App() {
 
   const subscribe = async () => {
     const API_URL = process.env.REACT_APP_API_URL;
-    const response = await fetch(API_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: {
+
+    const response = await axios.post(API_URL, {
         email: email,
         category: category
-      }
     });
 
-    const data = await response.json();
-
-    if (data.executionArn) {
+    const data = response.data;
+    if (data.status === 200) {
       setMessage('Successfully subscribed!');
     } else {
       setMessage('Error in subscription. Please try again.');
